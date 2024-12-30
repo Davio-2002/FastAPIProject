@@ -1,23 +1,18 @@
 from fastapi import FastAPI
 from app.core.config import settings
 from app.db.init_db import init_db
-from app.api.endpoints import client
-from contextlib import asynccontextmanager
-from sqlalchemy import inspect
 from app.db.session import engine
+from sqlalchemy import inspect
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
+app = FastAPI(title=settings.APP_NAME, debug=settings.DEBUG)
+
+@app.on_event("startup")
+def startup_event():
     init_db()
-    yield
-
-app = FastAPI(title=settings.APP_NAME, lifespan=lifespan)
-
-app.include_router(client.router, prefix="/clients", tags=["clients"])
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to FastAPI Project!"}
+    return {"message": "Welcome to David's FastAPI Project!"}
 
 @app.get("/tables")
 def check_tables():
