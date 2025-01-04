@@ -6,6 +6,8 @@ from app.db.init_db import init_db
 from app.db.init_db import populate_data
 
 from app.api.endpoints import client
+from app.api.endpoints import tour
+from app.api.endpoints import order
 from contextlib import asynccontextmanager
 
 from sqlalchemy import inspect
@@ -20,6 +22,8 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title=settings.APP_NAME, lifespan=lifespan)
 
 app.include_router(client.router, prefix="/clients", tags=["clients"])
+app.include_router(tour.router, prefix="/tours", tags=["tours"])
+app.include_router(order.router, prefix="/orders", tags=["orders"])
 
 @app.get("/")
 def read_root():
